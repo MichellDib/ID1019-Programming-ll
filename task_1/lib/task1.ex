@@ -36,21 +36,77 @@ defmodule Task1 do
   # ---------------------------------------------------------------
 
   # Handles special case where the entire list has been iterated through
-  def largest([] largest_value) do
-   largest_value
+  def largest([], largest_value) do
+    largest_value
   end
 
   # Main recursion loop, compares head with the current largest value
   def largest(list, largest_value) do
     [head | tail] = list
+
     if head > largest_value do
       largest(tail, head)
     else
-      largest(tail largest_value)
+      largest(tail, largest_value)
     end
   end
 
   # ---------------------------------------------------------------
 
+  # Multiplies m and n recursively.
+  def product_case(m, n) do
+    case m do
+      0 ->
+        m
+
+      _ ->
+        n + product_case(m - 1, n)
+    end
+  end
+
+  # ---------------------------------------------------------------
+
+  # Returns nth element in list
+  def nth(n, l) do
+    [head | tail] = l
+
+    case n do
+      1 ->
+        head
+
+      _ ->
+        nth(n - 1, tail)
+    end
+  end
+
+  # ---------------------------------------------------------------
+
+  # Return the number of elements in the list l
+  def len(l) do
+    [_head | tail] = l
+
+    case tail do
+      [] ->
+        1
+
+      _ ->
+        len(tail) + 1
+    end
+  end
+
+  # ---------------------------------------------------------------
+
+  # Inserts element x in array l
+  def add(x, l) do
+    [head | tail] = l
+    cond do
+      tail == [] ->
+        [head, x]
+      x == head ->
+        l
+      x != head ->
+        [head | add(x, tail)]
+    end
+  end
 
 end
