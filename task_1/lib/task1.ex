@@ -21,7 +21,7 @@ defmodule Task1 do
 
   # ---------------------------------------------------------------
 
-  # Base case that handles when array has been iterated through
+  # Base case that handles when list has been iterated through
   def sum([], sum) do
     sum
   end
@@ -99,14 +99,30 @@ defmodule Task1 do
   # Inserts element x in array l
   def add(x, l) do
     [head | tail] = l
+
     cond do
       tail == [] ->
         [head, x]
+
       x == head ->
         l
+
       x != head ->
         [head | add(x, tail)]
     end
   end
 
+  # ---------------------------------------------------------------
+
+  def reverse(l) do
+    [head | tail] = l
+
+    cond do
+      tail == [] ->
+        head
+
+      true ->
+        [reverse(tail), head]
+    end
+  end
 end
