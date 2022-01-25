@@ -16,11 +16,11 @@ defmodule Task2 do
           {:exp, {:var, :x},{:num, 3}},
           {:num,5}}
     d = deriv(e, :x)
-    #c = calc(d, :x, 4)
+    c = calc(d, :x, 4)
     IO.write("Expression: #{print(e)}\n")
     IO.write("Derivative: #{print(d)}\n")
     IO.write("Simplified: #{print(simplify(d))}\n")
-    #IO.write("Calculated: #{print(simplify(c))}\n")
+    IO.write("Calculated: #{print(simplify(c))}\n")
   end
 
   def test3() do
@@ -43,6 +43,15 @@ defmodule Task2 do
     IO.write("Calculated: #{print(simplify(c))}\n")
   end
 
+  def test5() do
+    e = {:div, {:num,1},{:mul, {:num, 5},{:var, :x}}}
+    d = deriv(e, :x)
+    c = calc(d, :x, 4)
+    IO.write("Expression: #{print(e)}\n")
+    IO.write("Derivative: #{print(d)}\n")
+    IO.write("Simplified: #{print(simplify(d))}\n")
+    IO.write("Calculated: #{print(simplify(c))}\n")
+  end
 
   def deriv({:num, _}, _) do {:num, 0} end
   def deriv({:var, v}, v) do {:num, 1} end
@@ -74,6 +83,7 @@ defmodule Task2 do
   def deriv({:ln, e}, v) do {:div, {:num, 1}, e} end
   def deriv({:exp, {:ln, e1}, {:num, n}}, v) do {:div, n, e1} end
   def deriv({:mul, e1, e2}, v) do {:mul, e1,e2} end
+  def deriv({:div, {:num,1},e}, v) do {:div, {:num, -1}, {:exp, e, {:num,2}}} end
 
   def calc( {:num, n}, _, _) do {:num, n} end
   def calc( {:var, v}, v, n) do {:num, n} end
@@ -121,6 +131,7 @@ defmodule Task2 do
   def simplify_mul({:div, e1,e2}, {:num, n}) do {:div, {:num, n}, e2} end
   def simplify_mul(e1, e2) do {:mul, e1, e2} end
 
+  def simplify_div({:num, n1}, {:num, n2}) do {:num, n1/n2} end
   def simplify_div({:num, n}, e) do {:div, {:num, n},e} end
 
   def simplify_ln(e) do {:ln, e} end
