@@ -1,14 +1,14 @@
 defmodule Task2 do
 
   def test() do
-    e = {:ln, {:var, :x}}
+    e = {:mul,{:ln, {:var, :x}},{:num, 3}}
 
     d = deriv(e, :x)
-    #c = calc(d, :x, 5)
+    c = calc(d, :x, 5)
     IO.write("Expression: #{print(e)}\n")
     IO.write("Derivative: #{print(d)}\n")
     IO.write("Simplified: #{print(simplify(d))}\n")
-    #IO.write("Calculated: #{print(simplify(c))}\n")
+    IO.write("Calculated: #{print(simplify(c))}\n")
   end
 
   def test2() do
@@ -45,7 +45,7 @@ defmodule Task2 do
   # Derivative of ln(x) and ln(x^n)
   def deriv({:ln, e}, v) do {:div, {:num, 1}, e} end
   def deriv({:exp, {:ln, e1}, {:num, n}}, v) do {:div, n, e1} end
-  #def deriv({:mul, e1, e2}, v) do {:mul, e1,e2} end
+  def deriv({:mul, e1, e2}, v) do {:mul, e1,e2} end
 
   def calc( {:num, n}, _, _) do {:num, n} end
   def calc( {:var, v}, v, n) do {:num, n} end
@@ -62,6 +62,14 @@ defmodule Task2 do
     {:exp, calc(e1, v, n), calc(e2, v, n)}
   end
 
+  def calc({:ln, e}, v, n) do
+    {:ln, calc(e, v, n)}
+  end
+
+  def calc({:div,e1, e2}, v, n) do
+    {:div, calc(e1, v, n),calc(e2, v, n)}
+  end
+
   def simplify({:add, e1, e2}) do
     simplify_add(simplify(e1), simplify(e2))
   end
@@ -70,12 +78,16 @@ defmodule Task2 do
     simplify_mul(simplify(e1), simplify(e2))
   end
 
-  def simplify({:mul, {:div, e1}, e2}) do
-    simplify_mul(simplify(e1), simplify(e2))
-  end
-
   def simplify({:exp, e1, e2}) do
     simplify_exp(simplify(e1), simplify(e2))
+  end
+
+  def simplify({:ln, e}) do
+    simplify_ln(simplify(e))
+  end
+
+  def simplify({:div, e1,e2}) do
+    simplify_div(simplify(e1),simplify(e2))
   end
 
 
@@ -91,10 +103,13 @@ defmodule Task2 do
   def simplify_mul({:num, 1}, e2) do e2 end
   def simplify_mul(e1, {:num, 1}) do e1 end
   def simplify_mul({:num, n1}, {:num, n2}) do {:num,n1*n2} end
-  def simplify_mul({:div, e1}, {:num, n}) do {:div, n, e1} end
+  def simplify_mul({:div, e1,e2}, {:num, n}) do {:div, {:num, n}, e2} end
   def simplify_mul(e1, e2) do {:mul, e1, e2} end
 
+  #def simplify_div({:num, n1}, {:num, n2}) do {:div, n1/n2} end
+  def simplify_div({:num, n}, e) do {:div, {:num, n},e} end
 
+  def simplify_ln(e) do {:ln, e} end
 
   def simplify_exp(_, {:num, 0}) do 1 end
   def simplify_exp(e1, {:num, 1}) do e1 end
@@ -108,4 +123,5 @@ defmodule Task2 do
   def print({:exp, e1, e2}) do "#{print(e1)}^#{print(e2)}" end
   def print({:ln, v}) do "ln(#{print(v)})" end
   def print({:div, e1, e2}) do "(#{print(e1)}/#{print(e2)})" end
+  def print({:div, {:num, n1}, e2}) do "(#{print(n1)}/#{print(e2)})" end
 end
