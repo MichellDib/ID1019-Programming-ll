@@ -1,10 +1,10 @@
 defmodule Task2 do
 
   def test1() do
-    e = {:mul,{:ln, {:var, :x}},{:num, 3}}
+    e = {:ln, {:var, :x}}
 
     d = deriv(e, :x)
-    c = calc(d, :x, 5)
+    c = calc(d, :x, 4)
     IO.write("Expression: #{print(e)}\n")
     IO.write("Derivative: #{print(d)}\n")
     IO.write("Simplified: #{print(simplify(d))}\n")
@@ -81,7 +81,6 @@ defmodule Task2 do
   end
 
   def deriv({:ln, e}, v) do {:div, {:num, 1}, e} end
-  def deriv({:exp, {:ln, e1}, {:num, n}}, v) do {:div, n, e1} end
   def deriv({:mul, e1, e2}, v) do {:mul, e1,e2} end
   def deriv({:div, {:num,1},e}, v) do {:div, {:num, -1}, {:exp, e, {:num,2}}} end
 
@@ -128,7 +127,7 @@ defmodule Task2 do
   def simplify_mul({:num, 1}, e2) do e2 end
   def simplify_mul(e1, {:num, 1}) do e1 end
   def simplify_mul({:num, n1}, {:num, n2}) do {:num,n1*n2} end
-  def simplify_mul({:div, e1,e2}, {:num, n}) do {:div, {:num, n}, e2} end
+  def simplify_mul({:div, {:num, e1},e2}, {:num, n}) do {:div, {:num,e1*n}, e2} end
   def simplify_mul(e1, e2) do {:mul, e1, e2} end
 
   def simplify_div({:num, n1}, {:num, n2}) do {:num, n1/n2} end
