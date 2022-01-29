@@ -1,7 +1,7 @@
 defmodule Task2 do
 
   def test1() do
-    e = {:ln, {:var, :x}}
+    e = {:ln, {:mul,{:num, 2},{:var, :x}}}
 
     d = deriv(e, :x)
     c = calc(d, :x, 4)
@@ -80,7 +80,7 @@ defmodule Task2 do
     {:mul, {:cos, e}, deriv(e, v)}
   end
 
-  def deriv({:ln, e}, v) do {:div, {:num, 1}, e} end
+  def deriv({:ln, e}, v) do {:div, deriv(e,v), e} end
   def deriv({:mul, e1, e2}, v) do {:mul, e1,e2} end
   def deriv({:div, {:num,1},e}, v) do {:div, {:num, -1}, {:exp, e, {:num,2}}} end
 

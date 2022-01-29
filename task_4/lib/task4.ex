@@ -15,8 +15,8 @@ defmodule Bench do
         List.foldr(seq, list_new(), fn (e, acc) -> list_insert(e, acc) end)
       end
 
-       tree = fn (seq) ->
-         List.foldr(seq, tree_new(), fn (e, acc) -> tree_insert(e, acc) end)
+      tree = fn (seq) ->
+        List.foldr(seq, tree_new(), fn (e, acc) -> tree_insert(e, acc) end)
       end
 
       tl = time.(i, list)
@@ -31,46 +31,42 @@ defmodule Bench do
     :ok
   end
 
-  def list_new() do l = [] end
+  def list_new() do
+    list = []
+  end
 
-  def list_insert(e, l) do
-    case l do
+  def list_insert(e, list) do
+    case list do
       [] ->
         [e]
-
       [h | t] ->
         if e < h do
-          [e | l]
+          [e | list]
         else
           [h | list_insert(e, t)]
         end
     end
   end
 
+  def tree_new() do {:node, :nil} end
 
-  def tree_new() do
-    {:node, :nil}
-  end
+  def tree_insert(e, :nil) do {:leaf, e} end
 
-  def tree_insert(value, :nil) do
-    {:leaf, value}
-  end
-
-  def tree_insert(value, {:leaf, v}) do
-    cond do
-      v < value -> {:node,v,:nil,{:leaf,value}}
-      v > value -> {:node,v,{:leaf,value}, :nil}
+  def tree_insert(e, {:node, value, left, right}) do
+    if e < value do
+      {:node, value, tree_insert(e, left), right}
+    else
+      {:node, value, left, tree_insert(e, right)}
     end
   end
 
-  def tree_insert(value, {:node, :nil}) do
-    {:node, value, {:leaf,:nil},{:leaf,:nil}}
-  end
-
-  def tree_insert(value, {:node, v, left, right}) do
-    cond do
-      value > v -> {:node,v,left,tree_insert(value,right)}
-      value < v -> {:node,v,tree_insert(value,left),right}
+  def tree_insert(e, {:leaf, value}) do
+    if e < value do
+      {:node, value, :nil, {:leaf, e}}
+    else
+      {:node, value, {:leaf, e}, :nil}
     end
   end
+
+  def tree_insert(e, {:node, :nil}) do {:node, e, :nil, :nil} end
 end
