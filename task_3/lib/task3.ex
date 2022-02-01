@@ -20,8 +20,8 @@ defmodule Task3 do
         {:addi, 5, 5, 1},
         {:out, 5},
         {:out, 6},
-        {:lw, 2, 0, 8},
         {:sw, 2, 0, 8},
+        {:lw, 2, 0, 8},
         {:beq, 5, 6, :loop},
         {:halt}
       },
@@ -55,6 +55,7 @@ defmodule Program do
 
   def read_word(data, i) do
     0 = rem(i, 4)
+    Tree.tree_read(i, data)
   end
 
   def write_word(data, i, val) do
@@ -99,6 +100,16 @@ defmodule Tree do
   def tree_new() do
     {:node, nil, nil}
   end
+
+  def tree_read(index, {:leaf, i, v}) do v end
+  def tree_read(index, {:node, i, v, left, right}) do
+    cond do
+      index == i -> v
+      index > i -> tree_read(index, right)
+      index < i -> tree_read(index, left)
+    end
+  end
+
 
   def tree_insert(index, insert_val, nil) do
     {:leaf, index, insert_val}
