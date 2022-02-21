@@ -7,9 +7,7 @@ defmodule Day1 do
 
   def test2() do
     everyList = Enum.chunk_every(read_file(), 3, 1, :discard)
-    IO.inspect(everyList)
     everyList = add(everyList)
-    IO.inspect(everyList)
     [head | tail] = everyList
     depth(everyList, head, 0)
   end
@@ -18,9 +16,9 @@ defmodule Day1 do
   def depth([], _, counter) do counter end
   def depth([head|tail], previous, counter) do
     cond do
-      previous == 0 ->
-        previous = head
-       depth(tail,previous,counter)
+      # previous == 0 ->
+      #   previous = head
+      #  depth(tail,previous,counter)
 
       previous < head ->
         counter = counter + 1
@@ -57,6 +55,4 @@ end
     String.split(file, "\r\n")
     |> Enum.map(&String.to_integer/1)
   end
-
-
 end
