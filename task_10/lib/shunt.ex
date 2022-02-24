@@ -7,14 +7,12 @@ defmodule Shunt do
       true ->
         [y | yt] = ys
         {hs, ts} = split(xs, y)
-
         moves = [
           {:one, 1 + Enum.count(ts)},
           {:two, Enum.count(hs)},
           {:one, -(1 + Enum.count(ts))},
           {:two, -(Enum.count(hs))}
         ]
-
         moves ++ find(ts ++ hs, yt)
     end
   end
@@ -46,11 +44,9 @@ defmodule Shunt do
 
   def split(train, n) do
     pos = ListMod.position(train, n)
-
     case pos do
       1 ->
         {[], ListMod.drop(train, pos)}
-
       _ ->
         {ListMod.take(train, pos - 1), ListMod.drop(train, pos)}
     end
