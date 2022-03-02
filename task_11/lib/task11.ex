@@ -8,7 +8,7 @@ defmodule Huffman do
   end
 
   def test do
-    sample = sample()
+    sample = text()
     tree = tree(sample)
     encode = encode_table(tree)
     decode = decode_table(tree)
@@ -16,15 +16,15 @@ defmodule Huffman do
     text = text()
     seq = encode(text, encode)
     IO.inspect(decode)
-    #decode = Enum.to_list(decode)
-    #IO.inspect(decode)
+    decode = Enum.to_list(decode)
+    IO.inspect(decode)
     List.to_string(decode(seq, decode))
   end
 
   def tree(sample) do
     freq = Map.to_list(freq(sample))
     freq = freq |> Enum.sort_by(&elem(&1, 1))
-    huffman(freq)
+    IO.inspect(huffman(freq))
   end
 
   def freq(sample) do
@@ -83,14 +83,14 @@ defmodule Huffman do
     Map.put(table, k, path)
   end
 
-  def find_path({left, right}, table, path) do
-    table = find_path(left, table, path ++ [0])
-    find_path(right, table, path ++ [1])
-  end
+  # def find_path({left, right}, table, path) do
+  #   table = find_path(left, table, path ++ [0])
+  #   find_path(right, table, path ++ [1])
+  # end
 
-  def find_path(key, table, path) do
-    Map.put(table, key, path)
-  end
+  # def find_path(key, table, path) do
+  #   Map.put(table, key, path)
+  # end
 
   def encode([], table) do
     []
