@@ -70,18 +70,6 @@ defmodule Huffman do
     end
   end
 
-  def encode_table({tree, freq}) do
-    encode_table(tree, %{}, [])
-  end
-
-  def encode_table({left, right}, table, path) do
-    table = encode_table(left, table, path ++ [0])
-    encode_table(right, table, path ++ [1])
-  end
-
-  def encode_table(k, table, path) do
-    Map.put(table, k, path)
-  end
 
   # def find_path({left, right}, table, path) do
   #   table = find_path(left, table, path ++ [0])
